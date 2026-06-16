@@ -60,8 +60,8 @@ const inputMessage = ref('');
 const messages = ref('');
 
 const handleSendMessage = () => {
-  const text = inputMessage.value;
-  messages.value = text;
+  messages.value = inputMessage.value;
+  inputMessage.value = '';
 };
 
 </script>
