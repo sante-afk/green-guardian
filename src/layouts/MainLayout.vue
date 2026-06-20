@@ -1,19 +1,18 @@
 <template >
   <div class="common-layout">
     <el-container>
-      <el-aside width="200px">
+      <el-aside width="250px">
         <div class="container-progress">
           <el-text class="el-text">Humidity</el-text>
           <el-progress 
             :text-inside="true" 
             :stroke-width="26" 
-            :percentage="70" />
-
-          <el-text class="el-text">Warm</el-text>
+            :percentage="humidityValue" />
+          <el-text class="el-text">Temperature</el-text>
           <el-progress
             :text-inside="true"
             :stroke-width="24"
-            :percentage="100"
+            :percentage="temperatureValue"
             status="success"
           />
           <el-text class="el-text">Happy</el-text>
@@ -23,7 +22,6 @@
             :percentage="80"
             status="warning"
           />
-
           <el-text class="el-text">Water</el-text>
           <el-progress
             :text-inside="true"
@@ -31,6 +29,7 @@
             :percentage="50"
             status="exception"
           />
+          <el-button size="small" round class="el-button-refresh" @click="hundleRefresh()">refresh</el-button>
         </div>
       </el-aside>
       <el-main class="el-main">
@@ -44,7 +43,7 @@
             size="small"
             class="el-input"
           />
-          <el-button size="small" @click="handleSendMessage">send</el-button>
+          <el-button round size="small"@click="handleSendMessage()">send</el-button>
         </el-form>
       </el-main>
       <el-aside>
@@ -54,12 +53,63 @@
   </div>
 </template>
 <script setup lang="ts">
-import {ref} from 'vue'
+import {ref, onMounted} from 'vue'
+import { ElMessageBox } from 'element-plus'
 const urlFlower = '/src/assets/images/flower.png';
 const inputMessage = ref('');
 const messages = ref('');
+const humidityValue = ref('0');
+const temperatureValue = ref('0');
 
-const handleSendMessage = () => {
+declare global {
+  interface Navigator {
+    serial: any;
+  }
+}
+
+const hundleRefresh = async() => {
+  try {
+      const port = await navigator.serial.requestPort()
+      await port.open({ baudRate: 9600 });
+      const reader = port.readable.getReader();
+
+      const numsArray: number[] = [];
+      while (port) {
+        const { value, done } = await reader.read();
+        if (done) {
+          reader.releaseLock();
+          ElMessageBox.alert("port off", 'Info', {
+            confirmButtonText: 'Ok',
+          });
+          break;
+        }
+        let values: string = new TextDecoder().decode(value);
+        let nums = values.match(/\d+/g);
+
+        if (nums && numsArray.length !== 2) {
+          numsArray.push(parseInt(nums[0]));
+          numsArray.push(parseInt(nums[1]));
+        }
+
+        if (numsArray.length === 2) {
+          humidityValue.value = String(numsArray[0]);
+          temperatureValue.value = String(numsArray[1]);
+          numsArray.length = 0;
+        }
+      }
+      console.log(port);
+  } catch (error) {
+    ElMessageBox.alert("request port error", 'Error', {
+      confirmButtonText: 'Ok',
+    });
+  }
+  
+}
+onMounted(async() => {
+  
+});
+
+const handleSendMessage = async() => {
   messages.value = inputMessage.value;
   inputMessage.value = '';
 };

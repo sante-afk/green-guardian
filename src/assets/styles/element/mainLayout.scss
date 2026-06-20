@@ -1,3 +1,6 @@
+:deep(.el-form .el-input__wrapper) {
+    border-radius: 20px !important;
+}
 .common-layout {
     display: flex;
     align-items: center;
@@ -13,12 +16,17 @@
 .el-form {
     display: flex;
     justify-content: center;
+    border-radius: 20px;
 }
 .el-input {
     padding-right: 20px;
     width: 250px;
 }
 .el-flower{
+    width: 100%;
+}
+.el-button-refresh {
+    margin-top: 16px;
     width: 100%;
 }
 .container-messages {
@@ -29,11 +37,14 @@
     word-break: break-all;
     overflow-x: auto;
     width: 270px;
-    height: 50%;
+    height: 100%;
     margin-bottom: 15px;
     color: white;
     border-radius: 8px;
     padding: 15px;
+}
+.container-progress {
+    margin-left: 20%;
 }
 .container-progress .el-progress--line {
     margin-bottom: 15px;
