@@ -18,3 +18,4 @@ node_modules/
 # Arduino libraries
 *.zip
 arduino/firmware/data/*.zip
+.DS_Store

@@ -43,7 +43,6 @@ const temperatureValue = ref('0');
 const happyValue = ref('0');
 const waterValue = ref('0');
 
-<<<<<<< HEAD
 declare global {
   interface Navigator {
     serial: any;
@@ -108,13 +107,10 @@ const hundleRefresh = async () => {
   }
 }
 
-const handleSendMessage = async () => {
-=======
 const handleSendMessage = () => {
->>>>>>> f437a513256cb36f2165a3ac37e3c1c5de8a5a3d
   messages.value = inputMessage.value;
   inputMessage.value = '';
-};
+}
 
 </script>
 <style scoped>
