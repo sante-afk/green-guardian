@@ -13,7 +13,9 @@ node_modules/
 # Editor settings
 .vscode/
 .idea/
-.DS_Store   
+.DS_Store
+
 # Arduino libraries
 *.zip
 arduino/firmware/data/*.zip
+.DS_Store
