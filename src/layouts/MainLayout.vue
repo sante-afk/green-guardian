@@ -1,6 +1,7 @@
 <template>
-  <div class="common-layout">
-    <el-container>
+  <el-container>
+    <el-header style="background-color: red; margin: 0px; top: 0px">Header</el-header>
+    <el-container class="common-layout">
       <el-aside width="250px">
         <div class="container-progress">
           <el-text class="el-text">Humidity</el-text>
@@ -18,36 +19,47 @@
         </div>
       </el-aside>
       <el-main class="el-main">
-        <div class="container-messages">
-          <el-text>{{ messages }}</el-text>
-        </div>
+        <el-scrollbar class="scrollbar-container">
+          <p v-for="i in messagePerson" key="i" class="message-person">{{ i }}</p>
+          <!-- <el-alert v-model="erAlert" title="Error" type="error" center show-icon/>
+          <el-alert v-model="sucAlert" title="Success" type="success" center show-icon /> -->
+        </el-scrollbar>
         <el-form class="el-form">
           <el-input type="text" v-model="inputMessage" size="small" class="el-input" />
-          <el-button round size="small" @click="handleSendMessage()">send</el-button>
+          <el-button round size="small" @click="handleSendMessage(sucAlert, erAlert)">send</el-button>
         </el-form>
       </el-main>
       <el-aside>
         <el-image :src="urlFlower" class="el-flower" />
       </el-aside>
     </el-container>
-  </div>
+
+  </el-container>
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { ElMessageBox } from 'element-plus'
+import { postMessage } from "../api/postMessage"
 const urlFlower = '/src/assets/images/flower.png';
 const inputMessage = ref('');
-const messages = ref('');
+const messagePerson = ref(new Set());
 const humidityValue = ref('0');
 const temperatureValue = ref('0');
 const happyValue = ref('0');
 const waterValue = ref('0');
+const erAlert = ref(false);
+const sucAlert = ref(false);
 
 declare global {
   interface Navigator {
     serial: any;
   }
 }
+
+onMounted(() => {
+
+});
+
 const format = (value: string) => {
   return `${value}`;
 };
@@ -107,9 +119,14 @@ const hundleRefresh = async () => {
   }
 }
 
-const handleSendMessage = () => {
-  messages.value = inputMessage.value;
-  inputMessage.value = '';
+const handleSendMessage = async (sucAlert: any, erAlert: any) => {
+  const sAlert = sucAlert;
+  const eAlert = erAlert;
+  messagePerson.value.add(inputMessage.value);
+
+  const messageAi = await postMessage(inputMessage.value, sAlert, eAlert);
+  console.log(messageAi);
+  messagePerson.value.add(messageAi.choices[0].message.content);
 }
 
 </script>
