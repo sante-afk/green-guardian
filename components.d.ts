@@ -20,9 +20,11 @@ declare module 'vue' {
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElDescriptions: typeof import('element-plus/es')['ElDescriptions']
     ElDescriptionsItem: typeof import('element-plus/es')['ElDescriptionsItem']
+    ElDialog: typeof import('element-plus/es')['ElDialog']
     ElFooter: typeof import('element-plus/es')['ElFooter']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElHeader: typeof import('element-plus/es')['ElHeader']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMain: typeof import('element-plus/es')['ElMain']
@@ -32,5 +34,7 @@ declare module 'vue' {
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElText: typeof import('element-plus/es')['ElText']
+    ElTitle: typeof import('element-plus/es')['ElTitle']
+    ErrorDialog: typeof import('./src/components/ErrorDialog.vue')['default']
   }
 }
