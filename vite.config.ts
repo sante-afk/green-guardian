@@ -6,6 +6,7 @@ import ElementPlus from 'unplugin-element-plus/vite'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
+
   plugins: [
     vue(),
     AutoImport({
@@ -14,7 +15,9 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()],
     }),
-    ElementPlus(),
+    ElementPlus({
+      useSource: true,
+    }),
     
   ],
 })

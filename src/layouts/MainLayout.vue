@@ -1,32 +1,38 @@
 <template>
   <el-container>
-    <el-header style="background-color: red; margin: 0px; top: 0px">Header</el-header>
+    <el-header>
+      <div class="header-container">
+        <el-avatar :size="32" style="background-color: black;"
+          src="https://imgs.search.brave.com/oy9syiR5YnwjhHNhyYrSaFY2kmOHRH-8J-6qHVEnxes/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNTAv/NDc5LzEyMi9zbWFs/bC9wdXJwbGUtZmxv/d2Vycy13aXRoLWdy/ZWVuLWxlYXZlcy1j/dXQtb3V0LXN0b2Nr/LXBuZy5wbmc" />
+        <span class="label-app">Green Guardian</span>
+      </div>
+    </el-header>
     <el-container class="common-layout">
       <el-aside width="250px">
-        <div class="container-progress">
-          <el-text class="el-text">Humidity</el-text>
+        <div class="container-progress" style="font-family: monospace;">
+          <el-text class="el-text" style="color: #e6a23c;">Humidity</el-text>
           <el-progress :text-inside="true" :stroke-width="26" :percentage="humidityValue" status="warning"
             :format="format" />
-          <el-text class="el-text">Temperature</el-text>
+          <el-text class="el-text" style="color: #f56c6c;">Temperature</el-text>
           <el-progress :text-inside="true" :stroke-width="24" :percentage="temperatureValue" status="exception"
             :format="formatDegrees" />
-          <el-text class="el-text">Happy</el-text>
-          <el-progress :text-inside="true" :stroke-width="24" :percentage="happyValue" status="warning"
+          <el-text class="el-text" style="color: #67c23a;">Happy</el-text>
+          <el-progress :text-inside="true" :stroke-width="24" :percentage="happyValue" status="success"
             :format="format" />
-          <el-text class="el-text">Water</el-text>
+          <el-text class="el-text" style="color: #409eff;">Water</el-text>
           <el-progress :text-inside="true" :stroke-width="24" :percentage="waterValue" :format="format" />
           <el-button size="small" round class="el-button-refresh" @click="hundleRefresh()">refresh</el-button>
         </div>
       </el-aside>
       <el-main class="el-main">
         <el-scrollbar class="scrollbar-container">
-          <p v-for="i in messagePerson" key="i" class="message-person">{{ i }}</p>
-          <!-- <el-alert v-model="erAlert" title="Error" type="error" center show-icon/>
-          <el-alert v-model="sucAlert" title="Success" type="success" center show-icon /> -->
+            <p v-for="i in messagePerson" key="i" class="message-person">{{ i }}</p>
+            <p v-for="j in messageArtInt" key="j" class="message-ai">{{ j }}</p>
         </el-scrollbar>
         <el-form class="el-form">
           <el-input type="text" v-model="inputMessage" size="small" class="el-input" />
-          <el-button round size="small" @click="handleSendMessage(sucAlert, erAlert)">send</el-button>
+          <el-button round size="small" style="font-family: monospace;"
+            @click="handleSendMessage(sucAlert, erAlert)">send</el-button>
         </el-form>
       </el-main>
       <el-aside>
@@ -34,15 +40,21 @@
       </el-aside>
     </el-container>
 
+    <ErrorDialog v-model="errDialog" v-on:closeErrorDialog="errDialog = false" :err-message="errMessage" />
+
   </el-container>
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox, ElText } from 'element-plus'
 import { postMessage } from "../api/postMessage"
+import ErrorDialog from '../components/ErrorDialog.vue';
 const urlFlower = '/src/assets/images/flower.png';
 const inputMessage = ref('');
+const errMessage = ref('');
+const errDialog = ref(false);
 const messagePerson = ref(new Set());
+const messageArtInt = ref(new Set());
 const humidityValue = ref('0');
 const temperatureValue = ref('0');
 const happyValue = ref('0');
@@ -85,9 +97,8 @@ const hundleRefresh = async () => {
         const { value, done } = await reader.read();
         if (done) {
           reader.releaseLock();
-          ElMessageBox.alert("port off", 'Info', {
-            confirmButtonText: 'Ok',
-          });
+          errDialog.value = true;
+          errMessage.value = 'Port off'
           break;
         }
         let values: string = new TextDecoder().decode(value);
@@ -113,9 +124,8 @@ const hundleRefresh = async () => {
     }, 2000)
 
   } catch (error) {
-    ElMessageBox.alert("request port error", 'Error', {
-      confirmButtonText: 'Ok',
-    });
+    errDialog.value = true;
+    errMessage.value = 'Request port error'
   }
 }
 
@@ -126,7 +136,14 @@ const handleSendMessage = async (sucAlert: any, erAlert: any) => {
 
   const messageAi = await postMessage(inputMessage.value, sAlert, eAlert);
   console.log(messageAi);
-  messagePerson.value.add(messageAi.choices[0].message.content);
+
+  if (messageAi.isAxiosError) {
+    errDialog.value = true
+    errMessage.value = messageAi.message;
+  } else {
+    messageArtInt.value.add(messageAi.choices[0].message.content);
+  }
+
 }
 
 </script>
