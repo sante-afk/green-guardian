@@ -43,6 +43,13 @@
     font-family: monospace;
 }
 
+.header-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
 .header-container {
     padding: 20px;
 }
@@ -54,6 +61,11 @@
     font-family: monospace;
     text-decoration: underline;
     font-size: 15px;
+}
+
+.label-app::before {
+    color: aqua;
+    text-decoration: dotted;
 }
 
 .scrollbar-container {
