@@ -21,7 +21,7 @@
             :format="format" />
           <el-text class="el-text" style="color: #409eff;">Water</el-text>
           <el-progress :text-inside="true" :stroke-width="24" :percentage="waterValue" :format="format" />
-          <el-button size="small" round class="el-button-refresh" @click="hundleRefresh()">refresh</el-button>
+          <el-button size="small" round class="el-button-refresh" @click="hundleRefresh()" :loading="isRefresh">refresh</el-button>
         </div>
       </el-aside>
       <el-main class="el-main">
@@ -31,8 +31,8 @@
         </el-scrollbar>
         <el-form class="el-form">
           <el-input type="text" v-model="inputMessage" size="small" class="el-input" />
-          <el-button round size="small" style="font-family: monospace;"
-            @click="handleSendMessage(sucAlert, erAlert)">send</el-button>
+          <el-button round size="small" :loading="isLoading" style="font-family: monospace; display: flex; flex-direction: column;"
+            @click="handleSendMessage(sucAlert, erAlert)">{{ isLoading ? ' ' : 'send' }}</el-button>
         </el-form>
       </el-main>
       <el-aside>
@@ -61,6 +61,8 @@ const happyValue = ref('0');
 const waterValue = ref('0');
 const erAlert = ref(false);
 const sucAlert = ref(false);
+const isLoading = ref(false);
+const isRefresh = ref(false);
 
 declare global {
   interface Navigator {
@@ -84,6 +86,7 @@ const hundleRefresh = async () => {
   try {
     const encoder: TextEncoder = new TextEncoder();
     const port = await navigator.serial.requestPort()
+    isRefresh.value = true;
     await port.open({ baudRate: 9600 });
     await new Promise((r) => setTimeout(r, 2000));
     const writer = port.writable.getWriter();
@@ -117,6 +120,7 @@ const hundleRefresh = async () => {
           numsArray.length = 0;
           writer.releaseLock();
           reader.releaseLock();
+          isRefresh.value = false;
           await port.close();
         }
       }
@@ -124,6 +128,7 @@ const hundleRefresh = async () => {
     }, 2000)
 
   } catch (error) {
+    isRefresh.value = false;
     errDialog.value = true;
     errMessage.value = 'Request port error'
   }
@@ -133,8 +138,8 @@ const handleSendMessage = async (sucAlert: any, erAlert: any) => {
   const sAlert = sucAlert;
   const eAlert = erAlert;
   messagePerson.value.add(inputMessage.value);
-
-  const messageAi = await postMessage(inputMessage.value, sAlert, eAlert);
+  isLoading.value = true;
+  const messageAi = await postMessage(inputMessage.value, sAlert, eAlert, isLoading);
   console.log(messageAi);
 
   if (messageAi.isAxiosError) {

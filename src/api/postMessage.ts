@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 
-export const postMessage = async (message: string, sucAlert: any, erAlert: any) => {
+export const postMessage = async (message: string, sucAlert: any, erAlert: any, isLoading: any) => {
     try {
         const resp = await axios.post("http://localhost:5174/v1/chat/completions", {
             model: 'auto',
@@ -14,10 +14,12 @@ export const postMessage = async (message: string, sucAlert: any, erAlert: any) 
             }
         })
         sucAlert = true;
+        isLoading.value = false;
         return resp.data;
     } catch (error: AxiosError | unknown) {
         erAlert = true;
         console.log(error);
+        isLoading.value = false;
         return error;
     }
 }
