@@ -15,5 +15,5 @@ const goBack = () => {
 }
 </script>
 <style scoped>
-@import '/src/assets/styles/element/completeTasks.scss';
+@import '/src/assets/styles/element/myTask.scss';
 </style>
