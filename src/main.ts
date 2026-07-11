@@ -3,4 +3,8 @@ import { router } from '../src/router/router';
 import App from './App.vue'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 
-createApp(App).use(router).mount('#app')
+const app = createApp(App)
+app.use(router)
+await router.isReady();
+
+app.mount('#app')

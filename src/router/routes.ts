@@ -10,5 +10,10 @@ export const routes: Array<any> = [
     { 
         path: '/compTasks', 
         name: 'complete-tasks', 
-        component: () => import('../layouts/CompleteTasks.vue') }
+        component: () => import('../layouts/CompleteTasks.vue') },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'error-layout',
+        component: () => import('../layouts/ErrorNotFound.vue')
+    }
 ]
