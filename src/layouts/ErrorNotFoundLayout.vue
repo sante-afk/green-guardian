@@ -7,5 +7,5 @@
   </div>
 </template>
 <style scoped>
-@import '../assets/styles/element/errorNotFound.scss';
+@import '../assets/styles/element/errorNotFoundLayout.scss';
 </style>
