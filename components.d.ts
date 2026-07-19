@@ -23,6 +23,7 @@ declare module 'vue' {
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElFooter: typeof import('element-plus/es')['ElFooter']
     ElForm: typeof import('element-plus/es')['ElForm']
+    ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElImage: typeof import('element-plus/es')['ElImage']
@@ -36,6 +37,8 @@ declare module 'vue' {
     ElText: typeof import('element-plus/es')['ElText']
     ElTitle: typeof import('element-plus/es')['ElTitle']
     ErrorDialog: typeof import('./src/components/ErrorDialog.vue')['default']
+    NewTaskDialog: typeof import('./src/components/NewTaskDialog.vue')['default']
+    NewTaskForm: typeof import('./src/components/NewTaskForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

@@ -1,3 +1,42 @@
 .title-layout {
     font-weight: 600;
 }
+
+.containerTask {
+    width: 30%;
+}
+
+.tasks {
+    border: 1px solid;
+    border-color: #6c6e72;
+    border-radius: 199px;
+    margin: 10px 0px 10px;
+    height: 20px;
+    padding: 10px;
+    font-family: monospace;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dataContainer {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.buttonDelete {
+    height: 25px;
+}
+
+.buttonEdit {
+    height: 25px;
+}
+
+.buttonInfo {
+    height: 25px;
+}
