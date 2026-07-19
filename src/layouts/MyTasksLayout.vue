@@ -80,5 +80,5 @@ const checkValue = (value: any) => {
 } 
 </script>
 <style scoped>
-@import '/src/assets/styles/element/myTask.scss';
+@import '/src/assets/styles/element/myTasksLayout.scss';
 </style>
