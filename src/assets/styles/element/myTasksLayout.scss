@@ -4,6 +4,10 @@
 
 .containerTask {
     width: 30%;
+    overflow: scroll;
+    scrollbar-width: none;
+    height: 853px;
+    max-height: 20%;
 }
 
 .tasks {

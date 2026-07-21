@@ -7,13 +7,13 @@
             <el-button round @click="onOpenDialog">new task</el-button>
         </template>
         <div class="containerTask">
-            <div class="tasks" v-for="item in tasks" :key="item.id">
+            <div class="tasks" v-for="(item, index) in tasks" :key="item.id" id="tasks">
                 <div class="dataContainer">
                     <span>task name: {{ checkValue(item.name) }} </span>
                     <span>description: {{ checkValue(item.description) }} date: {{ new Date(item.date).toDateString() }}</span>
                 </div>
                 <div class="containerButton">
-                    <el-button round v-model="buttonDelete" @click="handleDelite" class="buttonDelete">
+                    <el-button round v-model="buttonDelete" @click="handleDelete(index)" class="buttonDelete">
                         <el-icon>
                             <Delete />
                         </el-icon>
@@ -51,12 +51,14 @@ const router = useRouter();
 const buttonDelete = ref(false);
 const buttonEdit = ref(false);
 const buttonInfo = ref(false);
+const tasks = ref<TasksType>([]);
 
 const onOpenDialog = () => {
     newTaskDialog.value = true;
 }
 
-const handleDelite = () => {
+const handleDelete = (index: number) => {
+    tasks.value.splice(index, 1);
 }
 
 const handleEdit = () => {
@@ -64,8 +66,6 @@ const handleEdit = () => {
 
 const handleInfo = () => {
 }
-
-const tasks = ref<TasksType>([]);
 
 const addTask = (task: TaskType) => {
     tasks.value = [...tasks.value, task];
