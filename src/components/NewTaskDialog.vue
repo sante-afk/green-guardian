@@ -1,11 +1,11 @@
 <template>
     <el-dialog width="500" title="new task" style="font-family: monospace;">
-        <el-form v-model="form">
+        <el-form v-model="form" label-width="auto" label-position="left">
             <el-form-item label="name">
-                <el-input :size="12" v-model="form.name" />
+                <el-input class="form-input" v-model="form.name" />
             </el-form-item>
             <el-form-item label="description">
-                <el-input v-model="form.description" />
+                <el-input class="form-input" v-model="form.description" />
             </el-form-item>
         </el-form>
         <template #footer end>
@@ -38,7 +38,7 @@ const onCreateTask = () => {
         errDialog.value = true;
         errMessage.value = "Error in some entries to complete";
     } else {
-        emit('newTask', {...form});
+        emit('newTask', { ...form });
         emit('onCloseNewTaskDialog')
     }
 }

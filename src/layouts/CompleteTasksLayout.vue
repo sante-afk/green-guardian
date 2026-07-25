@@ -3,15 +3,17 @@
         <template #content>
             <span class="title-layout">сomplete tasks over time</span>
         </template>
+        <TimerComponent @timerFinish=""/>
     </el-page-header>
 </template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+import TimerComponent from '../components/TimerComponent.vue'
 
 const router = useRouter();
 
 const goBack = () => {
-    router.push({ name: 'main-layout'});
+    router.push({ name: 'main-layout' });
 }
 </script>
 <style scoped>

@@ -1,0 +1,30 @@
+.main-container {
+    justify-content: center;
+}
+
+.timer-container {
+    margin-top: 250px;
+}
+
+.container-button {
+    justify-content: center;
+}
+
+.timer {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button-start {
+    height: 25px;
+}
+
+.button-pause {
+    height: 25px;
+}
+
+.button-reset {
+    height: 25px;
+}
