@@ -7,7 +7,7 @@
             <el-container class="container-button">
                 <el-button round size="large" class="button-start" @click="startTimer" :disabled="btnStartDisabled"
                     :loading="isLoading">start</el-button>
-                <el-button round size="large" class="button-pause">pause</el-button>
+                <el-button round size="large" class="button-pause" @click="pauseTimer">pause</el-button>
                 <el-button round size="large" class="button-reset" @click="resetTimer">reset</el-button>
             </el-container>
         </div>
@@ -28,6 +28,7 @@ const errDialog = ref(false);
 const pickerDisabled = ref(false);
 const btnStartDisabled = ref(false);
 const isLoading = ref(false);
+let timeId: any = null;
 
 const startTimer = () => {
     btnStartDisabled.value = true;
@@ -37,14 +38,15 @@ const startTimer = () => {
         const date = new Date(time.value);
         let minutes = date.getMinutes();
         let seconds = date.getSeconds();
-        const timeId = setInterval(() => {
+        timeId = setInterval(() => {
             if (seconds) {
                 seconds--;
-                console.log(seconds);
+                time.value = String(new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), minutes, seconds));
             } else {
                 if (minutes !== 0) {
                     minutes--;
                     seconds = 59;
+                    time.value = String(new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), minutes, seconds));
                 } else {
                     succDialog.value = true;
                     pickerDisabled.value = false;
@@ -65,7 +67,25 @@ const startTimer = () => {
 }
 
 const resetTimer = () => {
+    if (timeId != null) {
+        pickerDisabled.value = false;
+        isLoading.value = false;
+        btnStartDisabled.value = false;
+        clearInterval(timeId);
+        timeId = 0;
+        time.value = '';
+    }
 }
+
+const pauseTimer = () => {
+    if (timeId != null) {
+        pickerDisabled.value = false;
+        isLoading.value = false;
+        btnStartDisabled.value = false;
+        clearInterval(timeId);
+    }
+}
+
 </script>
 <style>
 @import '../assets/styles/element/timerComponent.scss';
