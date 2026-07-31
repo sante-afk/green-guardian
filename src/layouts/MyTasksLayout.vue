@@ -23,7 +23,7 @@
                             <Edit />
                         </el-icon>
                     </el-button>
-                    <el-button round v-model="buttonInfo" @click="handleInfo" class="buttonInfo">
+                    <el-button round v-model="buttonInfo" @click="handleInfo(index)" class="buttonInfo">
                         <el-icon>
                             <InfoFilled />
                         </el-icon>
@@ -33,6 +33,7 @@
         </div>
     </el-page-header>
     <new-task-dialog v-model="newTaskDialog" @onCloseNewTaskDialog="newTaskDialog = false" @newTask="addTask" />
+    <DescriptionDialog v-model="descriptionDialog" @onCloseDescriptionDialog="descriptionDialog = false" :cardName="cardName" :cardDescription="cardDescription"/>
 </template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
@@ -45,13 +46,18 @@ import {
     Edit,
     InfoFilled
 } from '@element-plus/icons-vue'
+import DescriptionDialog from '../components/DescriptionDialog.vue';
 
 const newTaskDialog = ref(false);
+const descriptionDialog = ref(false);
+const cardName = ref();
+const cardDescription = ref();
 const router = useRouter();
 const buttonDelete = ref(false);
 const buttonEdit = ref(false);
 const buttonInfo = ref(false);
 const tasks = ref<TasksType>([]);
+
 
 const onOpenDialog = () => {
     newTaskDialog.value = true;
@@ -64,7 +70,11 @@ const handleDelete = (index: number) => {
 const handleEdit = () => {
 }
 
-const handleInfo = () => {
+const handleInfo = (index: number) => {
+    const task: TaskType | undefined = tasks.value[index];
+    cardName.value = task?.name;
+    cardDescription.value = task?.description;
+    descriptionDialog.value = true;
 }
 
 const addTask = (task: TaskType) => {
