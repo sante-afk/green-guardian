@@ -4,6 +4,9 @@
             <el-form-item label="name">
                 <el-text class="form-text" v-text="cardName" />
             </el-form-item>
+            <el-form-item label="date">
+                <el-text class="form-text" v-text="cardDate"/>
+            </el-form-item>
             <el-form-item label="description">
                 <el-text class="form-text" v-text="cardDescription" />
             </el-form-item>
@@ -18,7 +21,8 @@
 <script lang="ts" setup>
 defineProps({
     cardName: String,
-    cardDescription: String
+    cardDescription: String,
+    cardDate: String
 })
 </script>
 <style>
