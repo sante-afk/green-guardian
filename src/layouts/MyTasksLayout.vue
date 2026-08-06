@@ -33,7 +33,7 @@
         </div>
     </el-page-header>
     <new-task-dialog v-model="newTaskDialog" @onCloseNewTaskDialog="newTaskDialog = false" @newTask="addTask" />
-    <DescriptionDialog v-model="descriptionDialog" @onCloseDescriptionDialog="descriptionDialog = false" :cardName="cardName" :cardDescription="cardDescription"/>
+    <DescriptionDialog v-model="descriptionDialog" @onCloseDescriptionDialog="descriptionDialog = false" :cardName="cardName" :cardDescription="cardDescription" :cardDate="cardDate"/>
 </template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
@@ -47,17 +47,18 @@ import {
     InfoFilled
 } from '@element-plus/icons-vue'
 import DescriptionDialog from '../components/DescriptionDialog.vue';
+import dayjs from 'dayjs'
 
 const newTaskDialog = ref(false);
 const descriptionDialog = ref(false);
 const cardName = ref();
 const cardDescription = ref();
+const cardDate = ref();
 const router = useRouter();
 const buttonDelete = ref(false);
 const buttonEdit = ref(false);
 const buttonInfo = ref(false);
 const tasks = ref<TasksType>([]);
-
 
 const onOpenDialog = () => {
     newTaskDialog.value = true;
@@ -74,6 +75,7 @@ const handleInfo = (index: number) => {
     const task: TaskType | undefined = tasks.value[index];
     cardName.value = task?.name;
     cardDescription.value = task?.description;
+    cardDate.value = dayjs(task?.date).format('MMM D, YYYY h:mm A');
     descriptionDialog.value = true;
 }
 
