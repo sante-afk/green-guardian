@@ -137,7 +137,6 @@ const hundleRefresh = async () => {
           await port.close();
         }
       }
-      console.log(port);
     }, 2000)
 
   } catch (error) {

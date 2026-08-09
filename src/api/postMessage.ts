@@ -18,7 +18,6 @@ export const postMessage = async (message: string, sucAlert: any, erAlert: any, 
         return resp.data;
     } catch (error: AxiosError | unknown) {
         erAlert = true;
-        console.log(error);
         isLoading.value = false;
         return error;
     }
