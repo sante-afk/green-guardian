@@ -10,7 +10,8 @@
             <div class="tasks" v-for="(item, index) in tasks" :key="item.id" id="tasks">
                 <div class="dataContainer">
                     <span>task name: {{ checkValue(item.name) }} </span>
-                    <span>description: {{ checkValue(item.description) }} date: {{ new Date(item.date).toDateString() }}</span>
+                    <span>description: {{ checkValue(item.description) }} date: {{ new Date(item.date).toDateString()
+                        }}</span>
                 </div>
                 <div class="containerButton">
                     <el-button round v-model="buttonDelete" @click="handleDelete(index)" class="buttonDelete">
@@ -18,7 +19,7 @@
                             <Delete />
                         </el-icon>
                     </el-button>
-                    <el-button round v-model="buttonEdit" @click="handleEdit" class="buttonEdit">
+                    <el-button round v-model="buttonEdit" @click="handleEdit(index)" class="buttonEdit">
                         <el-icon>
                             <Edit />
                         </el-icon>
@@ -33,7 +34,10 @@
         </div>
     </el-page-header>
     <new-task-dialog v-model="newTaskDialog" @onCloseNewTaskDialog="newTaskDialog = false" @newTask="addTask" />
-    <DescriptionDialog v-model="descriptionDialog" @onCloseDescriptionDialog="descriptionDialog = false" :cardName="cardName" :cardDescription="cardDescription" :cardDate="cardDate"/>
+    <EditTaskDialog v-model="editTaskDialog" @onCloseEditTaskDialog="editTaskDialog = false" :cardName="cardName"
+        :cardDescription="cardDescription" :cardDate="cardDate" :cardIndex="cardIndex" @editTask="editTask"/>
+    <DescriptionDialog v-model="descriptionDialog" @onCloseDescriptionDialog="descriptionDialog = false"
+        :cardName="cardName" :cardDescription="cardDescription" :cardDate="cardDate" />
 </template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
@@ -47,13 +51,16 @@ import {
     InfoFilled
 } from '@element-plus/icons-vue'
 import DescriptionDialog from '../components/DescriptionDialog.vue';
+import EditTaskDialog from '../components/EditTaskDialog.vue';
 import dayjs from 'dayjs'
 
 const newTaskDialog = ref(false);
+const editTaskDialog = ref(false);
 const descriptionDialog = ref(false);
 const cardName = ref();
 const cardDescription = ref();
 const cardDate = ref();
+const cardIndex = ref();
 const router = useRouter();
 const buttonDelete = ref(false);
 const buttonEdit = ref(false);
@@ -68,7 +75,13 @@ const handleDelete = (index: number) => {
     tasks.value.splice(index, 1);
 }
 
-const handleEdit = () => {
+const handleEdit = (index: number) => {
+    const task: TaskType | undefined = tasks.value[index];
+    cardName.value = task?.name;
+    cardDescription.value = task?.description;
+    cardDate.value = dayjs(task?.date).format('MMM D, YYYY h:mm A');
+    cardIndex.value = index;
+    editTaskDialog.value = true;
 }
 
 const handleInfo = (index: number) => {
@@ -81,6 +94,13 @@ const handleInfo = (index: number) => {
 
 const addTask = (task: TaskType) => {
     tasks.value = [...tasks.value, task];
+}
+
+const editTask = (eTask: any) => {
+    const task = tasks.value[eTask?.index];
+    task.name = eTask.editName.value;
+    task.date = eTask.editDate.value;
+    task.description = eTask.editDescription.value;
 }
 
 const goBack = () => {

@@ -12,7 +12,7 @@
             <el-button round @click="onCreateTask">
                 create
             </el-button>
-            <el-button round @click="$emit('onCloseNewTaskDialog')">
+            <el-button round @click="onCloseTaskDialog">
                 close
             </el-button>
         </template>
@@ -39,8 +39,16 @@ const onCreateTask = () => {
         errMessage.value = "Error in some entries to complete";
     } else {
         emit('newTask', { ...form });
-        emit('onCloseNewTaskDialog')
+        form.name = '';
+        form.description = '';
+        emit('onCloseNewTaskDialog');
     }
+}
+
+const onCloseTaskDialog = () => {
+    form.name = '';
+    form.description = '';
+    emit('onCloseNewTaskDialog')
 }
 </script>
 <style scoped>
